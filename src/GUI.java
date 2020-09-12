@@ -24,8 +24,8 @@ public class GUI extends PApplet {
         // TODO:  uncomment these lines!
         // display.setColor(Simulator.ON_FIRE, color(255, 0, 0));
         // display.setColor(Simulator.ASH, color(180, 180, 180));
-        // display.setColor(Simulator.LIVING, color(0, 0, 255));
-        // display.setColor(Simulator.EMPTY, color(255, 255, 255));
+         gridDisplay.setColor(Simulator.LIVING_TREE, color(0, 180, 0));
+         gridDisplay.setColor(Simulator.EMPTY_SPACE, color(255, 255, 255));
 
     }
 
