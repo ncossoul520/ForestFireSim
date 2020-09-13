@@ -22,20 +22,18 @@ public class GUI extends PApplet {
 
         // Set different grid values to different colors
         // TODO:  uncomment these lines!
-        // display.setColor(Simulator.ON_FIRE, color(255, 0, 0));
+         gridDisplay.setColor(Simulator.BURNING_TREE, color(200, 0, 0));
         // display.setColor(Simulator.ASH, color(180, 180, 180));
          gridDisplay.setColor(Simulator.LIVING_TREE, color(0, 180, 0));
          gridDisplay.setColor(Simulator.EMPTY_SPACE, color(255, 255, 255));
-
     }
 
     @Override
     public void draw() {
         background(200);
-
-        // TODO: have your simulation run one step.
-
         gridDisplay.drawGrid(sim.getDisplayGrid()); // display the game
+        sim.runOneStep();
+        delay(500); // TODO remove
     }
 
     public static void main(String[] args) {
