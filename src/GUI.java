@@ -21,11 +21,10 @@ public class GUI extends PApplet {
         gridDisplay.setNumRows(sim.getHeight());
 
         // Set different grid values to different colors
-        // TODO:  uncomment these lines!
-         gridDisplay.setColor(Simulator.BURNING_TREE, color(200, 0, 0));
-        // display.setColor(Simulator.ASH, color(180, 180, 180));
-         gridDisplay.setColor(Simulator.LIVING_TREE, color(0, 180, 0));
-         gridDisplay.setColor(Simulator.EMPTY_SPACE, color(255, 255, 255));
+        gridDisplay.setColor(Simulator.BURNING_TREE, color(200, 0, 0));
+        gridDisplay.setColor(Simulator.ASH, color(180, 180, 180));
+        gridDisplay.setColor(Simulator.LIVING_TREE, color(0, 180, 0));
+        gridDisplay.setColor(Simulator.EMPTY_SPACE, color(255, 255, 255));
     }
 
     @Override
@@ -33,7 +32,13 @@ public class GUI extends PApplet {
         background(200);
         gridDisplay.drawGrid(sim.getDisplayGrid()); // display the game
         sim.runOneStep();
-        delay(500); // TODO remove
+        sim.displayStats();
+        if ( sim.isOver() ) {
+            delay(2000);
+            exit();
+        } else {
+            delay(100);
+        }
     }
 
     public static void main(String[] args) {

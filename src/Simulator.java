@@ -11,12 +11,17 @@ public class Simulator {
 
     private static int[][] forest;
     private static int row, col;
-    private static ArrayList<Location> fires = new ArrayList<>();
+
     public final static int EMPTY_SPACE  = 0; // must be zero for proper initialization
     public final static int LIVING_TREE  = 1;
     public final static int BURNING_TREE = 2;
     public final static int ASH          = 3;
-    private final static int DENSITY = 75;
+    private final static int DENSITY = 50;
+
+    private int stats_trees = 0;
+    private int stats_alive = 0;
+    private int stats_on_fire = 0;
+    private int stats_burned = 0;
 
     public Simulator(int r, int c) {
         row = r;
@@ -24,6 +29,7 @@ public class Simulator {
         forest   = new int[row][col];
         initialize(DENSITY);
         setFire();
+//        setFire(50, 50);
     }
 
     // TODO: add methods outlines in assignment sheet
@@ -34,17 +40,18 @@ public class Simulator {
     //
 
     public void initialize(int n){
-        int num_trees_total = (n * row * col) / 100;
+        stats_trees = (n * row * col) / 100;
+        stats_alive = stats_trees;
         int num_trees = 0;
 
         do {
             int tempRow= (int)(Math.random()*row);
             int tempCol= (int)(Math.random()*col);
-            if (forest[tempRow][tempCol] == EMPTY_SPACE){
+            if ( forest[tempRow][tempCol] == EMPTY_SPACE ){
                 num_trees++;
                 forest[tempRow][tempCol] = LIVING_TREE;
             }
-        } while( num_trees < num_trees_total );
+        } while( num_trees < stats_trees);
     }
 
 
@@ -54,54 +61,47 @@ public class Simulator {
             r = (int)(Math.random()*row);
             c = (int)(Math.random()*col);
         } while (forest[r][c] != LIVING_TREE);
-        // TODO for testing, remove:
-        r = 50;
-        c = 50;
+        forest[r][c] = BURNING_TREE;
+        stats_alive--;
+    }
+
+    private void setFire(int r, int c) {
         forest[r][c] = BURNING_TREE;
     }
 
 
-    public int runOneStep(){
-        int[][] nextStep = new int[row][col];
-        System.arraycopy(forest, 0, nextStep, 0, forest.length);
-//        int[][] nextStep = forest.clone();
-        int num_trees_fire = 0;
-
+    public void runOneStep() {
+        ArrayList<Location> new_fires = new ArrayList<>();
         for (int r = 0; r < row; r++) {
             for (int c = 0; c < col; c++) {
-                if ( forest[r][c] == LIVING_TREE && nextToFire(r, c) ){
-                    nextStep[r][c] = BURNING_TREE;
-                    num_trees_fire++;
-                }
-            }
-        }
-
-        // TODO could this be part of the previous loops?
-//        for (int r = 0; r < forest.length ; r++) {
-//            for (int c = 0; c < forest[0].length; c++) {
-//                if (forest[r][c] == BURNING_TREE) {
-//                    nextStep[r][c] = ASH;
-//                }
-//            }
-//        }
-
-//        System.arraycopy(nextStep, 0, forest, 0, nextStep.length);
-//        forest = nextStep.clone();
-        return num_trees_fire;
-    }
-
-    public boolean nextToFire(int r, int c) {
-        for (int dr = -1; dr <= 1 ; dr++) {
-            for (int dc = -1; dc <= 1 ; dc++) {
-                if ( isInBound(r+dr, c+dc) ) {
-                    if ( forest[r+dr][c+dc] == BURNING_TREE ) {
-                        return true;
+                if (forest[r][c] == BURNING_TREE) {
+                    // Set on fire each of the neighbors
+                    for (int dr = -1; dr <= 1; dr++) {
+                        for (int dc = -1; dc <= 1; dc++) {
+                            if ( isInBound(r + dr, c + dc) ) {
+                                if ( forest[r + dr][c + dc] == LIVING_TREE ) {
+                                    Location loc = new Location(r+dr, c+dc);
+                                    if ( !new_fires.contains( loc ) ) {
+                                        new_fires.add(new Location(r + dr, c + dc));
+                                    }
+                                }
+                            }
+                        }
                     }
+                    forest[r][c] = ASH;
+                    stats_burned++;
                 }
             }
         }
-        return false;
+
+        stats_on_fire = new_fires.size();
+        stats_alive -= stats_on_fire;
+        for ( Location loc : new_fires ) {
+            forest[ loc.getRow() ][ loc.getCol() ] = BURNING_TREE;
+        }
     }
+
+
 
     private boolean isInBound(int r, int c) {
         return (r >= 0 && r < row && c >=0 && c < col);
@@ -118,5 +118,13 @@ public class Simulator {
 
     public int[][] getDisplayGrid() {
         return forest;
+    }
+
+    public void displayStats() {
+        System.out.println( "trees: " + stats_trees + "\talive: " + stats_alive + "\tburned: " + stats_burned + "\ton fire: " + stats_on_fire );
+    }
+
+    public boolean isOver() {
+        return stats_on_fire == 0;
     }
 }
