@@ -16,32 +16,24 @@ public class Simulator {
     public final static int LIVING_TREE  = 1;
     public final static int BURNING_TREE = 2;
     public final static int ASH          = 3;
-    private final static int DENSITY = 50;
 
     private int stats_trees = 0;
     private int stats_alive = 0;
     private int stats_on_fire = 0;
     private int stats_burned = 0;
 
+
     public Simulator(int r, int c) {
         row = r;
         col = c;
-        forest   = new int[row][col];
-        initialize(DENSITY);
-        setFire();
-//        setFire(50, 50);
+        forest = new int[row][col];
     }
 
-    // TODO: add methods outlines in assignment sheet
-    // * way to get statistical information about the current state of the simulation
-    // * way to run simulation for one step
-    // * way to do a "full run" of running until fires are burned out
-    // * way to (re-)initialize your forest with particular tree density
-    //
 
     public void initialize(int n){
         stats_trees = (n * row * col) / 100;
         stats_alive = stats_trees;
+        stats_burned = 0;
         int num_trees = 0;
 
         do {
@@ -55,7 +47,7 @@ public class Simulator {
     }
 
 
-    private void setFire() {
+    public void setFire() {
         int r, c;
         do {
             r = (int)(Math.random()*row);
@@ -65,7 +57,7 @@ public class Simulator {
         stats_alive--;
     }
 
-    private void setFire(int r, int c) {
+    public void setFire(int r, int c) {
         forest[r][c] = BURNING_TREE;
     }
 
@@ -101,12 +93,17 @@ public class Simulator {
         }
     }
 
-
-
     private boolean isInBound(int r, int c) {
         return (r >= 0 && r < row && c >=0 && c < col);
     }
 
+    public void displayStats() {
+        System.out.println( "trees: " + stats_trees + "\talive: " + stats_alive + "\tburned: " + stats_burned + "\ton fire: " + stats_on_fire );
+    }
+
+    public boolean isOver() {
+        return stats_on_fire == 0;
+    }
 
     public int getWidth() {
         return col;
@@ -120,11 +117,20 @@ public class Simulator {
         return forest;
     }
 
-    public void displayStats() {
-        System.out.println( "trees: " + stats_trees + "\talive: " + stats_alive + "\tburned: " + stats_burned + "\ton fire: " + stats_on_fire );
+    public int getStats_trees() {
+        return stats_trees;
     }
 
-    public boolean isOver() {
-        return stats_on_fire == 0;
+    public int getStats_alive() {
+        return stats_alive;
     }
+
+    public int getStats_on_fire() {
+        return stats_on_fire;
+    }
+
+    public int getStats_burned() {
+        return stats_burned;
+    }
+
 }
