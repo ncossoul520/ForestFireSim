@@ -1,9 +1,20 @@
 public class MonteCarloOutput {
-    public static void main(String[] args) {
-        // A non-graphical runner for doing a lot
-        // of simulations and displaying the results
 
-        // You'd run this if you wanted to run, say 1000 trials for
-        // a set of initial conditions and see the results.
+    private static Simulator sim;
+
+    public static void main(String[] args) {
+
+        sim = new Simulator(100, 100);
+
+        for (int i = 0; i < 10; i++) {
+            sim.initialize(50);
+            sim.setFire();
+
+            do {
+                sim.runOneStep();
+            } while ( !sim.isOver() );
+
+            sim.displayStats(); // TODO: instead, get the stats and do average
+        }
     }
 }

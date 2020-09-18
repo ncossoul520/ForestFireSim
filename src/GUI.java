@@ -11,6 +11,8 @@ public class GUI extends PApplet {
     public void setup() {
         // Create a simulator
         sim = new Simulator(100, 100);
+        sim.initialize( 50 );
+        sim.setFire();
 
         // Create the display
         // parameters: (10,10) is upper left of display
