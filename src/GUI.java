@@ -24,7 +24,7 @@ public class GUI extends PApplet {
 
         // Set different grid values to different colors
         gridDisplay.setColor(Simulator.BURNING_TREE, color(200, 0, 0));
-        gridDisplay.setColor(Simulator.ASH, color(180, 180, 180));
+        gridDisplay.setColor(Simulator.BURNED_TREE, color(180, 180, 180));
         gridDisplay.setColor(Simulator.LIVING_TREE, color(0, 180, 0));
         gridDisplay.setColor(Simulator.EMPTY_SPACE, color(255, 255, 255));
     }

@@ -3,7 +3,6 @@ public class MonteCarloOutput {
     private static Simulator sim;
 
     public static void main(String[] args) {
-
         sim = new Simulator(100, 100);
 
         for (int i = 0; i < 10; i++) {
